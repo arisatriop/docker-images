@@ -1,0 +1,62 @@
+stages:
+  - build
+
+variables:
+  VERSIONED_IMAGE: ${GCP_PROJECT_ID}/${CI_PROJECT_PATH}
+  GIT_SSL_NO_VERIFY: "true"
+
+php7.3:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p "${GOOGLE_APPLICATION_CREDENTIALS%/*}"
+    - echo $KANIKO_SECRET | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/7.3/Dockerfile --destination $VERSIONED_IMAGE:7.3
+  only:
+    - /^php7.3-v(\d+\.)(\d+)$/
+  tags:
+    - build
+
+php7.3-ora:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p "${GOOGLE_APPLICATION_CREDENTIALS%/*}"
+    - echo $KANIKO_SECRET | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/7.3-ora/Dockerfile --destination $VERSIONED_IMAGE:7.3-ora
+  only:
+    - /^php7.3-ora-v(\d+\.)(\d+)$/
+  tags:
+    - build
+    
+php7.4:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p "${GOOGLE_APPLICATION_CREDENTIALS%/*}"
+    - echo $KANIKO_SECRET | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/7.4/Dockerfile --destination $VERSIONED_IMAGE:7.4
+  only:
+    - /^php7.4-v(\d+\.)(\d+)$/
+  tags:
+    - build
+
+php8.0:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p "${GOOGLE_APPLICATION_CREDENTIALS%/*}"
+    - echo $KANIKO_SECRET | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/8.0/Dockerfile --destination $VERSIONED_IMAGE:8.0
+  only:
+    - /^php8.0-v(\d+\.)(\d+)$/
+  tags:
+    - build
