@@ -100,13 +100,9 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
     \
-    mkdir -p /var/log/app; \
-    mkdir -p /root/.ssh \
-        && echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa \
-        && chmod 600 /root/.ssh/id_rsa \
-        && touch /root/.ssh/known_hosts \
-        && ssh-keyscan gitlab-cloud.uii.ac.id > /root/.ssh/known_hosts
+    mkdir -p /var/log/app; 
 
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 COPY ./8.0/nginx.conf /etc/nginx/nginx.conf
 COPY ./8.0/app.conf /etc/supervisor/conf.d/app.conf.stub
 COPY ./8.0/www.conf /usr/local/etc/php-fpm.d/default.conf

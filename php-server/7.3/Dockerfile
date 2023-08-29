@@ -100,12 +100,13 @@ RUN set -eux; \
     \
     mkdir -p /var/log/app/queue
 
-COPY ./php-server/7.3/nginx.conf /etc/nginx/nginx.conf
-COPY ./php-server/7.3/app.conf /etc/supervisor/conf.d/app.conf.stub
-COPY ./php-server/7.3/www.conf /usr/local/etc/php-fpm.d/default.conf
-COPY ./php-server/7.3/prepare-entrypoint.sh /root/prepare-entrypoint.sh
-COPY ./php-server/7.3/entrypoint.sh /root/entrypoint.sh
-COPY ./php-server/7.3/foreground /root/foreground
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY ./7.3/nginx.conf /etc/nginx/nginx.conf
+COPY ./7.3/app.conf /etc/supervisor/conf.d/app.conf.stub
+COPY ./7.3/www.conf /usr/local/etc/php-fpm.d/default.conf
+COPY ./7.3/prepare-entrypoint.sh /root/prepare-entrypoint.sh
+COPY ./7.3/entrypoint.sh /root/entrypoint.sh
+COPY ./7.3/foreground /root/foreground
 
 RUN chmod +x /root/prepare-entrypoint.sh \
     && chmod +x /root/entrypoint.sh \

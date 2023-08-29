@@ -1,0 +1,54 @@
+stages:
+  - build
+
+variables:
+  # Docker image building for GCR
+  VERSIONED_IMAGE: ${GCP_PROJECT_ID}/${CI_PROJECT_PATH}
+
+build_golang1.17-ubuntu:
+  stage: build
+  image: gcr.io/kaniko-project/executor:debug
+  script:
+    - mkdir -p "${GOOGLE_APPLICATION_CREDENTIALS%/*}"
+    - echo $KANIKO_SECRET | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/1.17/Dockerfile --destination $VERSIONED_IMAGE:1.17-ubuntu
+  only:
+    - /^golang1.17-v(\d+\.)(\d+)$/  #match golang1.17-v1.0
+  tags:
+    - build
+
+build_golang1.18-ubuntu:
+  stage: build
+  image: gcr.io/kaniko-project/executor:debug
+  script:
+    - mkdir -p "${GOOGLE_APPLICATION_CREDENTIALS%/*}"
+    - echo $KANIKO_SECRET | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/1.18/Dockerfile --destination $VERSIONED_IMAGE:1.18-ubuntu
+  only:
+    - /^golang1.18-v(\d+\.)(\d+)$/  #match golang1.18-v1.0
+  tags:
+    - build
+
+build_golang1.19-ubuntu:
+  stage: build
+  image: gcr.io/kaniko-project/executor:debug
+  script:
+    - mkdir -p "${GOOGLE_APPLICATION_CREDENTIALS%/*}"
+    - echo $KANIKO_SECRET | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/1.19/Dockerfile --destination $VERSIONED_IMAGE:1.19-ubuntu
+  only:
+    - /^golang1.19-v(\d+\.)(\d+)$/  #match golang1.19-v1.0
+  tags:
+    - build
+
+build_golang1.20-ubuntu:
+  stage: build
+  image: gcr.io/kaniko-project/executor:debug
+  script:
+    - mkdir -p "${GOOGLE_APPLICATION_CREDENTIALS%/*}"
+    - echo $KANIKO_SECRET | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/1.20/Dockerfile --destination $VERSIONED_IMAGE:1.20-ubuntu
+  only:
+    - /^golang1.20-v(\d+\.)(\d+)$/  #match golang1.20-v1.0
+  tags:
+    - build
